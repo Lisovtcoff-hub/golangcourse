@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      k8s-app: myapp
+  template:
+    metadata:
+      labels:
+        k8s-app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: k3d-registry:12345/myapp:v0.1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,22 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+
+metadata:
+  name: mycluster
+
+servers: 1
+agents: 2
+
+kubeAPI:
+  host: "localhost"
+  hostIP: "127.0.0.1"
+  hostPort: "6445"
+
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+
+registries:
+  use:
+    - k3d-registry:12345 # в /etc/hosts надо добавить: 127.0.1.1  k3d-registry

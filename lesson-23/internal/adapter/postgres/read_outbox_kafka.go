@@ -1,0 +1,48 @@
+package postgres
+
+import (
+	"context"
+	"fmt"
+
+	"gitlab.golang-school.ru/potok-2/lessons/lesson-23/internal/domain"
+	"gitlab.golang-school.ru/potok-2/lessons/lesson-23/pkg/otel/tracer"
+	"gitlab.golang-school.ru/potok-2/lessons/lesson-23/pkg/transaction"
+)
+
+func (p *Postgres) ReadOutboxKafka(ctx context.Context, limit int) ([]domain.Event, error) {
+	ctx, span := tracer.Start(ctx, "adapter postgres ReadOutboxKafka")
+	defer span.End()
+
+	const sql = `WITH taken AS (SELECT id, topic, key, value
+					   FROM outbox
+					   ORDER BY created_at
+					   LIMIT $1 FOR UPDATE SKIP LOCKED)
+				DELETE
+				FROM outbox
+				WHERE id IN (SELECT id FROM taken)
+				RETURNING topic, key, value;`
+
+	txOrPool := transaction.TryExtractTX(ctx)
+
+	rows, err := txOrPool.Query(ctx, sql, limit)
+	if err != nil {
+		return nil, fmt.Errorf("txOrPool.Query: %w", err)
+	}
+
+	defer rows.Close()
+
+	events := make([]domain.Event, 0, limit)
+
+	for rows.Next() {
+		var e domain.Event
+
+		err = rows.Scan(&e.Topic, &e.Key, &e.Value)
+		if err != nil {
+			return nil, fmt.Errorf("rows.Scan: %w", err)
+		}
+
+		events = append(events, e)
+	}
+
+	return events, nil
+}

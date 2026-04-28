@@ -1,0 +1,17 @@
+package v1
+
+import (
+	pb "gitlab.golang-school.ru/potok-2/lessons/lesson-24/gen/grpc/profile_v1"
+	"gitlab.golang-school.ru/potok-2/lessons/lesson-24/internal/usecase"
+)
+
+type Handlers struct {
+	pb.UnimplementedProfileV1Server
+	usecase *usecase.UseCase
+}
+
+func New(uc *usecase.UseCase) *Handlers {
+	return &Handlers{
+		usecase: uc,
+	}
+}

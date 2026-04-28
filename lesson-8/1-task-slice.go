@@ -1,0 +1,16 @@
+package main
+
+import "fmt"
+
+func main() {
+	var foo []int
+	var bar []int
+
+	foo = append(foo, 1)
+	foo = append(foo, 2)
+	foo = append(foo, 3)
+	bar = append(foo, 4)
+	foo = append(foo, 5)
+
+	fmt.Println(foo, bar)
+}

@@ -1,3 +1,7 @@
-module github.com/Lisovtcoff-hub/golangcourse/tree/main/lesson-3
+module github.com/Lisovtcoff-hub/golangcourse/lesson-3
 
-go 1.26.2
+go 1.22
+
+require github.com/Lisovtcoff-hub/golangcourse/libs v0.0.0
+
+replace github.com/Lisovtcoff-hub/golangcourse/libs => ../libs

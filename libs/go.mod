@@ -1,3 +1,3 @@
-module github.com/Lisovtcoff-hub/golangcourse/tree/main/libs
+module github.com/Lisovtcoff-hub/golangcourse/libs
 
 go 1.26.2

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"gitlab.golang-school.ru/potok-2/mnepryakhin/libs/hello"
+	"github.com/Lisovtcoff-hub/golangcourse/libs/hello"
 )
 
 func main() {
